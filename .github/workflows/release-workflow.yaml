@@ -1,12 +1,13 @@
 name: Flutter Executable Builds
-
 on:
-  branches: [main, development]
   push:
+    branches:
+      - main
+      - development
     tags:
       - 'v*.*.*@stable'
       - 'v*.*.*@unstable'
-      - 'v*.*.*@experimental' # same as unstable but "stable" but some things may not work but not too unstable
+      - 'v*.*.*@experimental'
 jobs:
   build-windows:
     name: Build Windows EXE
