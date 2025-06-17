@@ -32,3 +32,10 @@ jobs:
         with:
           name: windows-exe
           path: build/windows/runner/Release/
+
+      - name: Create GH Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ github.ref_name }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
