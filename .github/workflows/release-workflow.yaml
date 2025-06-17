@@ -9,49 +9,13 @@ on:
 
 jobs:
   build:
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-
-    runs-on: ${{ matrix.os }}
-    name: Build on ${{ matrix.os }}
+    runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout source
-        uses: actions/checkout@v4
-
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.29.3'
-
-      - name: Install dependencies
-        run: flutter pub get
-
-      - name: Enable desktop targets
-        run: |
-          flutter config --enable-linux-desktop
-          flutter config --enable-windows-desktop
-          flutter config --enable-macos-desktop
-        if: runner.os == 'Linux'
-
-      - name: Build Windows Executable
-        run: flutter build windows --release
-        if: runner.os == 'Windows'
-
-      - name: Build Linux Executable
-        run: flutter build linux --release
-        if: runner.os == 'Linux'
-
-      - name: Build macOS Executable
-        run: flutter build macos --release
-        if: runner.os == 'macOS'
+      - name: Build Windows
 
       - name: Upload Executable Bundle
         uses: actions/upload-artifact@v4
         with:
-          name: executable-${{ runner.os }}
           path: |
             build/windows/runner/Release/
-            build/linux/x64/release/bundle/
-            build/macos/Build/Products/Release/
