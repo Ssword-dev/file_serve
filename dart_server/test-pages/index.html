@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple File Hosting</title>
+</head>
+
+<body>
+    <div id="root"></div>
+    <script src="/test-pages/mini-react.js?ct=application/javascript"></script>
+    <script src="/test-pages/task-scheduler.js?ct=application/javascript"></script>
+    <script defer>
+        const { Work, WorkScheduler } = TaskScheduler;
+
+        // Define a simple work unit
+        const work = Work([
+            async () => {
+                console.log("[test] Work started");
+                await new Promise(r => setTimeout(r, 1000));
+                
+                return "success";
+            },
+            async () => {
+                // this should go 3rd because previous step took too long
+                console.log("[test] Work finished");
+            }
+        ]);
+
+        const work2 = Work([
+            async () => {
+                console.log("[Work 2] Finished!")
+            }
+        ])
+
+        const work3 = Work([
+            async () => {
+                console.log("[Work 3] Step 1");
+                await new Promise(r => setTimeout(r, 500));
+                return "step 1 done";
+            },
+            async () => {
+                console.log("[Work 3] Step 2");
+            }
+        ]);
+
+        const work4 = Work([
+            async () => {
+                console.log("[Work 4] Processing...");
+                await new Promise(r => setTimeout(r, 200));
+            }
+        ]);
+
+        const work5 = Work([
+            async () => {
+                console.log("[Work 5] Initialization");
+                await new Promise(r => setTimeout(r, 300));
+                return "initialized";
+            },
+            async () => {
+                console.log("[Work 5] Completed");
+            }
+        ]);
+
+        const work6 = Work([
+            async () => {
+                console.log("[Work 6] Executing single step");
+            }
+        ]);
+
+        // Create the scheduler
+        const scheduler = new WorkScheduler();
+
+        // Add the work to the scheduler
+        scheduler.addWork(work);
+        scheduler.addWork(work2);
+        scheduler.addWork(work3);
+        scheduler.addWork(work4);
+        scheduler.addWork(work5);
+        scheduler.addWork(work6);
+        // Start the scheduler: poll every 50ms, FIFO, 10ms quantum
+        scheduler.begin(50, "fifo", 1200);
+    </script>
+    <!-- <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script> -->
+    <!-- <script>
+        // only run this after Babel has loaded
+        window.addEventListener("DOMContentLoaded", () => {
+            fetch("/test-pages/app.jsx")
+                .then((res) => res.text())
+                .then((code) => {
+                    const output = Babel.transform(code, {
+                        presets: ["react"],
+                        filename: "app.jsx",
+                    }).code;
+                    console.log("Executing JSX Output:\n\n" + output);
+                    eval(output);
+                });
+        });
+    </script> -->
+    <script src="/test-pages/app.js?ct=application/javascript" defer></script>
+</body>
+
+</html>

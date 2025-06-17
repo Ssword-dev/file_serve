@@ -1,0 +1,22 @@
+{
+  "mimes": {
+    "text/html": "\\.html?$",
+    "text/css": "\\.css$",
+    "application/javascript": "\\.js$",
+    "application/json": "\\.json$",
+    "image/png": "\\.png$",
+    "image/jpeg": "\\.jpe?g$",
+    "image/gif": "\\.gif$",
+    "image/svg+xml": "\\.svg$",
+    "video/mp4": "\\.mp4$",
+    "application/pdf": "\\.pdf$",
+    "application/zip": "\\.zip$",
+    "text/plain; charset=utf-8": "\\.txt$",
+    "font/woff2": "\\.woff2?$",
+    "application/octet-stream": "\\.(exe|bin|dll)$",
+    "application/xml": "\\.xml$",
+    "application/x-sh": "\\.sh$",
+    "application/x-python": "\\.py$",
+    "text/markdown": "\\.md$"
+  }
+}

@@ -1,0 +1,1 @@
+- Add File System restrictions (i dont trust isolates)

@@ -1,0 +1,76 @@
+part of app.library.dart_server;
+
+class DartServer {
+  final int port;
+  final Directory rootDirectory;
+  HttpServer? server;
+
+  DartServer({required this.port, required this.rootDirectory});
+
+  Future<void> start() async {
+    final server = await HttpServer.bind(InternetAddress.anyIPv4, port);
+    this.server = server;
+    final mimeGuesser = MimeGuesser();
+    print("Server is available at ${server.address.address}:$port");
+
+    await for (final req in server) {
+      _handleRequest(req, mimeGuesser);
+    }
+  }
+
+  Future<void> _handleRequest(HttpRequest req, MimeGuesser mimeGuesser) async {
+    final uri = req.uri;
+    final method = req.method;
+    final clientIp = req.connectionInfo?.remoteAddress.address ?? "unknown";
+
+    print("$method $uri from $clientIp");
+
+    if (_isTraversalAttack(uri)) {
+      _sendJson(req, HttpStatus.unauthorized, {"reason": "Malicious request"});
+      return;
+    }
+
+    final safePath = _resolveSafePath(uri.path);
+    final file = File(safePath);
+
+    if (!await file.exists()) {
+      _sendJson(req, HttpStatus.notFound, {"reason": "File not found"});
+      return;
+    }
+
+    try {
+      final mime = uri.queryParameters['ct'] ?? mimeGuesser.guessMime(safePath);
+      req.response.headers.contentType = ContentType.parse(mime);
+      req.response.statusCode = HttpStatus.ok;
+      await req.response.addStream(file.openRead());
+    } catch (e) {
+      req.response.statusCode = HttpStatus.internalServerError;
+      req.response.write("Internal server error");
+    } finally {
+      await req.response.close();
+    }
+  }
+
+  String _resolveSafePath(String requestPath) {
+    // normalize and ensure it's always inside the rootDirectory
+    final resolved = path.resolve(requestPath, rootDirectory.path);
+    return resolved;
+  }
+
+  bool _isTraversalAttack(Uri uri) =>
+  // if it contains any go-back operator, uhh ig is a traversal 10% of the time
+  uri.pathSegments.any((seg) => seg == '..');
+
+  void _sendJson(HttpRequest req, int status, Map<String, dynamic> body) {
+    req.response.statusCode = status;
+    req.response.headers.contentType = ContentType.json;
+    req.response.write(json.encode(body));
+    req.response.close();
+  }
+
+  Future<void> close() async {
+    await server?.close();
+  }
+}
+
+### What is in here was the old code for DartServer before Virtualized FileSystem
