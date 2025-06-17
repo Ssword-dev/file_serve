@@ -7,6 +7,8 @@ import 'native/app.dart'
 
 /// The entrypoint of the app itself, the app is defined at compile time
 /// and is split between 2 routes, native, or web
+///
+/// TODO: host web installer page in vercel
 Future<void> main() async {
   await UserPreferences().init();
   runApp(App(appConfig: appConfig));
