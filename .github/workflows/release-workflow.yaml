@@ -2,11 +2,10 @@ name: Flutter Executable Builds
 
 on:
   push:
-    branches:
-      - main
     tags:
-      - 'v*'
-
+      - 'v*.*.*@stable'
+      - 'v*.*.*@unstable'
+      - 'v*.*.*@experimental' # same as unstable but "stable" but some things may not work but not too unstable
 jobs:
   build-windows:
     name: Build Windows EXE
@@ -19,7 +18,7 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.29.3' # or your current version
+          flutter-version: '3.29.3'
 
       - name: Install dependencies
         run: flutter pub get
@@ -36,7 +35,7 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
-          files: 
+          paths: 
             - build/windows/runner/Release
           tag_name: ${{ github.ref_name }}
           generate_release_notes: true
@@ -46,4 +45,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 permissions:
-  contents: write  # allow release creation
+  contents: write
