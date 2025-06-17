@@ -25,7 +25,6 @@ if (-not $envPath.Split(";") -contains $outDir) {
 # set path to the executable
 $ExecutableProgramPath = Join-Path -Path $outDir -ChildPath "file_serve.exe"
 
-# create a desktop shortcut
 $shortcutPath = Join-Path -Path $env:USERPROFILE -ChildPath "Desktop\file_serve.lnk"
 $wshShell = New-Object -ComObject WScript.Shell
 $shortcut = $wshShell.CreateShortcut($shortcutPath)
@@ -33,7 +32,7 @@ $shortcut = $wshShell.CreateShortcut($shortcutPath)
 $shortcut.TargetPath = $ExecutableProgramPath
 $shortcut.WorkingDirectory = Split-Path $ExecutableProgramPath
 $shortcut.WindowStyle = 1
-$shortcut.Description = "Shortcut to File Serve"
+$shortcut.Description = "Shortcut to FileServe"
 $shortcut.IconLocation = "$ExecutableProgramPath, 0"
 $shortcut.Save()
 
