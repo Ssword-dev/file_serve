@@ -3,7 +3,7 @@ on:
   push:
     branches:
       - main
-      - development
+      - development # todo: actually create this branch later
     tags:
       - 'release.[1-9].[0-9]?.[0-9]?.[0-9]?-[us]' # format: release.<maj>.<min>.<patch>.<subpatch>-<u or s depending on stability>
 jobs:
@@ -30,13 +30,12 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: windows-exe
-          path: build/windows/runner/Release/
+          path: build/windows/runner/Release/ # im trying to release my flutter app for windows
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
-          files:
-            - build/windows/runner/Release
+          files: build/windows/runner/Release
           tag_name: ${{ github.ref_name }}
           generate_release_notes: true
           draft: false
