@@ -1,6 +1,7 @@
 name: Flutter Executable Builds
 
 on:
+  branches: [main, development]
   push:
     tags:
       - 'v*.*.*@stable'
