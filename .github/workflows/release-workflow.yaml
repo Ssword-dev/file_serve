@@ -5,7 +5,7 @@ on:
       - main
       - development
     tags:
-      'release-*'
+      - 'release-*'
 jobs:
   build-windows:
     name: Build Windows EXE
