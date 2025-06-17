@@ -26,7 +26,7 @@ jobs:
         run: flutter pub get
 
       - name: Build Windows EXE
-        run: flutter build windows --release
+        run: flutter build windows --release --no-animation
 
       - name: Zip Executable Output
         run: |
