@@ -5,9 +5,9 @@ on:
       - main
       - development
     tags:
-      - 'v*.*.*@stable'
-      - 'v*.*.*@unstable'
-      - 'v*.*.*@experimental'
+      - 'v*.?.?@stable'
+      - 'v*.?.?@unstable'
+      - 'v*.?.?@experimental'
 jobs:
   build-windows:
     name: Build Windows EXE
